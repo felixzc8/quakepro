@@ -8,6 +8,11 @@ API, client patch, or telemetry service.
 
 _Real Textual UI, captured with synthetic demo data. No private transcript data._
 
+> PyPI publication is pending. For the GitHub alpha, use
+> `uv tool install 'git+https://github.com/felixzc8/quakepro.git@v0.1.0'`
+> in place of `uv tool install quakepro` below. This requires Git; pipx accepts
+> the same Git URL. Package-name installation becomes available after publication.
+
 ## Quick start
 
 Requires Python 3.10+ and at least one supported coding client.
