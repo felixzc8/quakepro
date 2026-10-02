@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python-version: "3.10"
+          - os: ubuntu-latest
+            python-version: "3.14"
+          - os: macos-latest
+            python-version: "3.14"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+      - run: uv sync --locked --all-groups
+      - name: Check source hook adapters with POSIX sh
+        shell: sh
+        run: |
+          adapter_dir=$(mktemp -d)
+          : > "$adapter_dir/DISABLED"
+          for script in open-pane.sh close-pane.sh codex-open-pane.sh; do
+            cp "$script" "$adapter_dir/$script"
+            /bin/sh -eu "$adapter_dir/$script" </dev/null
+            "$adapter_dir/$script" </dev/null
+          done
+      - run: uv run --no-sync pytest

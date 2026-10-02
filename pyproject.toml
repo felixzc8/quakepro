@@ -1,0 +1,52 @@
+[project]
+name = "quakepro"
+version = "0.1.0"
+description = "A live agent-graph TUI for Claude Code, Codex, and pi"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [
+    { name = "Felix Chen" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "textual>=8.2.7,<9",
+    "rich>=15.0.0",
+    "watchfiles>=1.1,<2",
+    "regex>=2024.11.6",
+]
+
+[project.urls]
+Repository = "https://github.com/felixzc8/quakepro"
+Issues = "https://github.com/felixzc8/quakepro/issues"
+
+[project.scripts]
+quakepro = "quakepro.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.0,<0.13"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
+
+[tool.uv]
+package = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
