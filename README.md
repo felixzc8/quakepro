@@ -4,10 +4,10 @@ Watch Claude Code, Codex, and pi agents in one live terminal interface. Follow
 parallel work, nested agents, and failures, then inspect the recorded actions.
 QuakePro reads local session files; it needs no API connection or client patch.
 
-![Tree view with two groups of parallel agents and a five-level nested chain; checkmarks, arrows, and an error mark distinguish completed, running, and failed work.](https://raw.githubusercontent.com/felixzc8/quakepro/main/docs/assets/quakepro-tree.png)
+![Codex tracing QuakePro's architecture on the left, with parallel parser and UI reviewers and a nested accessibility reviewer in QuakePro on the right.](https://raw.githubusercontent.com/felixzc8/quakepro/main/docs/assets/quakepro-codex-tree.png)
 
-*Actual QuakePro UI with synthetic session data. Two agent waves and a nested
-release workflow demonstrate roles, phases, and mixed statuses. No private transcripts.*
+*A real Codex review beside QuakePro in tmux. Images render the captured terminal
+contents; the run uses a clean copy of the public repository.*
 
 ## Quick start
 
@@ -45,15 +45,19 @@ Use repeated `--root DIR` options to watch several projects together.
 Press **v** to switch to Timeline. Each agent gets a lane on the same time scale,
 so concurrent work and the later nested chain are easy to compare.
 
-![Timeline of eleven agents: parallel agents in two waves, a later nested chain, and a debugger lane ending with a failure mark.](https://raw.githubusercontent.com/felixzc8/quakepro/main/docs/assets/quakepro-timeline.png)
+<details>
+<summary>See the same Codex run in Timeline</summary>
+
+![Codex's architecture review beside QuakePro's timeline, showing overlapping parser, UI, and accessibility reviewers.](https://raw.githubusercontent.com/felixzc8/quakepro/main/docs/assets/quakepro-codex-timeline.png)
+
+</details>
 
 Press **Enter** on an agent, then expand an action to read its input and output.
 Here, the mock debugger's deliberately failing command is open for inspection.
 
 ![Failure inspector showing the selected debugger, the false command, exit code 1, and its command output beneath the agent tree.](https://raw.githubusercontent.com/felixzc8/quakepro/main/docs/assets/quakepro-inspector.png)
 
-Screenshots use the same synthetic workflow and the real app renderer. Status
-symbols and text accompany colors. [Reproduce the captures](https://github.com/felixzc8/quakepro/blob/main/docs/guide.md#reproduce-the-screenshots).
+The failure example uses synthetic data. Status symbols and text accompany colors. [Reproduce the captures](https://github.com/felixzc8/quakepro/blob/main/docs/guide.md#reproduce-the-screenshots).
 
 ## Essential keys
 

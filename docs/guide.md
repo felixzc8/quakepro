@@ -14,13 +14,26 @@ package-name examples below until publication.
 
 ## Reproduce the screenshots
 
-The README shows the real Textual application with synthetic session records,
-using the two parallel waves and five-level chain in `prompts/showcase-claude.md`
-and `prompts/showcase-codex.md`. The simulated failure is intentional. These are
-UI demonstrations, not evidence of a live provider run; see the
-[release validation report](release-validation.md) for live tests.
+The Codex split-pane images show a real read-only review of the public repository,
+including parallel parser and UI reviewers and a nested accessibility reviewer. They render the
+actual ANSI contents of two side-by-side tmux panes, rather than an operating
+system window screenshot. No transcript text or agent states are invented.
 
-From the repository root:
+To capture your own two-pane window, review both panes for private information,
+then run:
+
+```sh
+uv run --with resvg-py scripts/capture_split_pane.py \
+  --socket quakepro-readme --target review:0 \
+  --output docs/assets/quakepro-codex-tree.png
+```
+
+The socket and target identify your tmux session. Press `v` in the QuakePro pane
+and repeat with a different output filename to capture Timeline.
+
+The standalone Tree, Timeline, and failure-inspector images use synthetic session
+records based on `prompts/showcase-claude.md` and `prompts/showcase-codex.md`.
+The simulated failure is intentional. Reproduce those examples with:
 
 ```sh
 uv run --with resvg-py scripts/capture_showcase.py
