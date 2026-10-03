@@ -20,7 +20,7 @@ uv run pytest
 
 The installed `quakepro` command enters `src/quakepro/cli.py`; `./quakepro`
 is a convenience launcher for a source checkout. Runtime modules live under
-`src/quakepro/`, and tests live under `tests/`. See the README's Files section
+`src/quakepro/`, and tests live under `tests/`. See the [user guide's Files section](docs/guide.md#files)
 for the module map.
 
 Maintainers: see [the release procedure](docs/releasing.md).
