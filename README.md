@@ -6,7 +6,7 @@ QuakePro reads local session files; it needs no API connection or client patch.
 
 ![Tree view with two groups of parallel agents and a five-level nested chain; checkmarks, arrows, and an error mark distinguish completed, running, and failed work.](https://raw.githubusercontent.com/felixzc8/quakepro/main/docs/assets/quakepro-tree.png)
 
-*Actual QuakePro UI with synthetic showcase data. Two agent waves and a nested
+*Actual QuakePro UI with synthetic session data. Two agent waves and a nested
 release workflow demonstrate roles, phases, and mixed statuses. No private transcripts.*
 
 ## Quick start
@@ -50,7 +50,7 @@ so concurrent work and the later nested chain are easy to compare.
 Press **Enter** on an agent, then expand an action to read its input and output.
 Here, the mock debugger's deliberately failing command is open for inspection.
 
-![Failure inspector showing the selected debugger, the false command, exit code 1, and its expected-failure output beneath the agent tree.](https://raw.githubusercontent.com/felixzc8/quakepro/main/docs/assets/quakepro-inspector.png)
+![Failure inspector showing the selected debugger, the false command, exit code 1, and its command output beneath the agent tree.](https://raw.githubusercontent.com/felixzc8/quakepro/main/docs/assets/quakepro-inspector.png)
 
 Screenshots use the same synthetic workflow and the real app renderer. Status
 symbols and text accompany colors. [Reproduce the captures](https://github.com/felixzc8/quakepro/blob/main/docs/guide.md#reproduce-the-screenshots).
@@ -69,7 +69,7 @@ symbols and text accompany colors. [Reproduce the captures](https://github.com/f
 
 - Supports local Claude Code, Codex, and pi transcripts. Client format changes
   may require an update. See [tested versions and limits](https://github.com/felixzc8/quakepro/blob/main/docs/release-validation.md).
-- Auto-open supports tmux and Herdr, with iTerm2/Terminal fallback on macOS.
+- Auto-open supports tmux and Herdr. Without either, launch QuakePro manually.
 - There is no session picker yet. Use the options above to select a session.
 - Monitoring makes no network requests and leaves transcripts unchanged.
   Transcripts and the local cache may contain secrets already recorded by a client.

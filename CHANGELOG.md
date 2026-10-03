@@ -2,6 +2,10 @@
 
 User-facing release notes for QuakePro.
 
+## Unreleased
+
+- Remove the macOS terminal fallback. Auto-open now requires tmux or Herdr.
+
 ## 0.1.0 — 2026-10-02
 
 Initial alpha release.

@@ -873,39 +873,19 @@ def test_slow_title_is_bounded_and_split_self_identifies(runtime):
     assert any(call[:1] == ["kill-pane"] for call in calls)
 
 
-@pytest.mark.parametrize("iterm, application", [
-    ("true", "iTerm2"),
-    ("false", "Terminal"),
-])
-def test_macos_fallback_and_persistent_deduplication(runtime, iterm, application):
-    bundle, env, _ = runtime
-    env.pop("TMUX_PANE")
-    env.pop("TMUX")
-    env["FAKE_PS_CHAIN"] = json.dumps(["pane_lifecycle", "codex", "/bin/zsh"])
-    env["FAKE_UNAME"] = "Darwin"
-    env["FAKE_ITERM_EXISTS"] = iterm
-    transcript = rollout(Path(env["CODEX_HOME"]) / "sessions" / "root.jsonl", "mac-session")
-
-    run_hook(bundle, env, hook_payload("mac-session", transcript))
-    run_hook(bundle, env, hook_payload("mac-session", transcript))
-
-    records = [json.loads(line) for line in Path(env["FAKE_OSASCRIPT_LOG"])
-               .read_text(encoding="utf-8").splitlines()]
-    actions = [entry for entry in records if not any("exists application" in value for value in entry)]
-    assert len(actions) == 1
-    assert application in actions[0][-1]
-    assert str(transcript) in actions[0][-1]
-
-
-def test_non_macos_without_tmux_exits_silently(runtime):
+@pytest.mark.parametrize("platform", ["Darwin", "Linux"])
+@pytest.mark.parametrize("iterm", ["true", "false"])
+def test_without_pane_host_never_opens_terminal(runtime, platform, iterm):
     bundle, env, state_path = runtime
     env.pop("TMUX_PANE")
     env.pop("TMUX")
     env["FAKE_PS_CHAIN"] = json.dumps(["pane_lifecycle", "codex", "/bin/zsh"])
-    env["FAKE_UNAME"] = "Linux"
-    transcript = rollout(Path(env["CODEX_HOME"]) / "sessions" / "root.jsonl", "linux")
+    env["FAKE_UNAME"] = platform
+    env["FAKE_ITERM_EXISTS"] = iterm
+    transcript = rollout(Path(env["CODEX_HOME"]) / "sessions" / "root.jsonl", "no-host")
 
-    run_hook(bundle, env, hook_payload("linux", transcript))
+    run_hook(bundle, env, hook_payload("no-host", transcript))
+    run_hook(bundle, env, hook_payload("no-host", transcript))
 
     assert tmux_state(state_path)["splits"] == 0
     assert not Path(env["FAKE_OSASCRIPT_LOG"]).exists()

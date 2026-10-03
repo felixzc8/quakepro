@@ -328,8 +328,8 @@ and trust exact command. Project hooks and pi extensions need project trust.
 
 All three clients share pane rules. Each session gets its own 40% right pane in
 tmux or Herdr. Hook finds nearest host from process ancestry, keeps focus in work
-pane, and turns tmux mouse support on. With no pane host, macOS opens iTerm2 or
-Terminal; other systems stay silent. Concurrent starts are deduplicated.
+pane, and turns tmux mouse support on. Without either host, no window opens;
+launch QuakePro manually. Concurrent starts are deduplicated.
 
 Claude and Codex lifecycle events feed secure local state. `Stop` marks main loop
 waiting, `SubagentStop` records terminal agent state, and `SessionEnd` closes

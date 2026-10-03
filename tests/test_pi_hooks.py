@@ -94,11 +94,13 @@ def test_pi_session_start_opens_provider_specific_monitor(tmp_path, monkeypatch)
         [pi_fixture.header(session_id=session_id)],
     )
     opened = []
-    monkeypatch.setattr(pane_lifecycle, "_pane_host", lambda: ("", [], False))
+    monkeypatch.setattr(pane_lifecycle, "_pane_host", lambda: ("tmux", [], False))
+    monkeypatch.setattr(pane_lifecycle, "_originating_tmux", lambda: ("%1", "/tmp/tmux", False))
+    monkeypatch.setattr(pane_lifecycle.shutil, "which", lambda _: "/usr/bin/tmux")
     monkeypatch.setattr(
         pane_lifecycle,
-        "_open_terminal",
-        lambda provider, current_id, launch: opened.append(
+        "_open_tmux",
+        lambda provider, current_id, pane, socket, title, launch, command: opened.append(
             (provider, current_id, shlex.split(launch)),
         ),
     )
@@ -126,8 +128,10 @@ def test_pi_session_start_opens_provider_specific_monitor(tmp_path, monkeypatch)
 def test_pi_hook_rejects_wrong_session_file(tmp_path, monkeypatch):
     path = pi_fixture.write_session(tmp_path / "session.jsonl", pi_fixture.entries())
     opened = []
-    monkeypatch.setattr(pane_lifecycle, "_pane_host", lambda: ("", [], False))
-    monkeypatch.setattr(pane_lifecycle, "_open_terminal", lambda *args: opened.append(args))
+    monkeypatch.setattr(pane_lifecycle, "_pane_host", lambda: ("tmux", [], False))
+    monkeypatch.setattr(pane_lifecycle, "_originating_tmux", lambda: ("%1", "/tmp/tmux", False))
+    monkeypatch.setattr(pane_lifecycle.shutil, "which", lambda _: "/usr/bin/tmux")
+    monkeypatch.setattr(pane_lifecycle, "_open_tmux", lambda *args: opened.append(args))
 
     pane_lifecycle.handle("pi", {
         "hook_event_name": "SessionStart",

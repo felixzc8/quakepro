@@ -490,59 +490,6 @@ def _open_tmux(provider: str, session_id: str, pane: str, socket: str,
         _tmux_run(command, "set", "-t", pane, "mouse", "on", timeout_cap=0.35)
 
 
-def _apple_string(value: str) -> str:
-    return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
-
-
-def _open_macos(launch: str) -> bool:
-    platform = subprocess.run(
-        ["uname"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        text=True,
-        timeout=_timeout(0.75, 1.5),
-    )
-    if platform.returncode != 0 or platform.stdout.strip() != "Darwin":
-        return False
-    osascript = shutil.which("osascript")
-    if not osascript:
-        return False
-    command = launch[5:] if launch.startswith("exec ") else launch
-    exists = subprocess.run(
-        [osascript, "-e", 'exists application "iTerm2"'],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        text=True,
-        timeout=_timeout(0.75, 0.75),
-    ).stdout.strip()
-    if exists == "true":
-        script = (
-            'tell application "iTerm2" to create window with default profile command '
-            + _apple_string(command)
-        )
-    else:
-        script = 'tell application "Terminal" to do script ' + _apple_string(command)
-    return subprocess.run(
-        [osascript, "-e", script],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        timeout=_timeout(0.75),
-    ).returncode == 0
-
-
-def _open_terminal(provider: str, session_id: str, launch: str) -> None:
-    with _session_lock(provider, session_id) as lock_fd:
-        os.lseek(lock_fd, 0, os.SEEK_SET)
-        if os.read(lock_fd, 32) == b"terminal-opened\n":
-            return
-        if not _open_macos(launch):
-            return
-        os.ftruncate(lock_fd, 0)
-        os.lseek(lock_fd, 0, os.SEEK_SET)
-        os.write(lock_fd, b"terminal-opened\n")
-        os.fsync(lock_fd)
-
-
 def _socket_candidates() -> list[str]:
     sockets = []
     value = os.environ.get("TMUX", "")
@@ -645,7 +592,7 @@ def handle(
     if not transcript:
         return
     launch = _launch(directory, provider, transcript, executable)
-    host, ancestry, indeterminate = _pane_host()
+    host, ancestry, _ = _pane_host()
     if host == "tmux":
         pane, socket, locator_indeterminate = _originating_tmux()
         tmux = shutil.which("tmux")
@@ -672,8 +619,6 @@ def handle(
                 launch,
                 herdr,
             )
-    elif not indeterminate:
-        _open_terminal(provider, fact.session_id, launch)
 
 
 def main(argv: list[str] | None = None, executable: str | None = None) -> int:
