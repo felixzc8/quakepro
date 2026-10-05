@@ -1,0 +1,11 @@
+#!/bin/sh
+DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P) || exit 1
+PYTHONPATH="$DIR/src${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH
+QUAKEPRO_EXECUTABLE="$DIR/quakepro"
+export QUAKEPRO_EXECUTABLE
+if [ -e "$DIR/DISABLED" ]; then
+  printf '%s\n' "QuakePro is disabled." >&2
+  exit 0
+fi
+exec "$DIR/.venv/bin/python" -m quakepro.cli "$@"

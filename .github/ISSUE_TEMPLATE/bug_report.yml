@@ -1,0 +1,50 @@
+name: Bug report
+description: Report behavior that differs from expectation.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include transcripts, credentials, or private paths.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: State expected and actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run ...
+        2. Press ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: QuakePro version or commit
+    validations:
+      required: true
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider
+      options:
+        - Claude Code
+        - Codex
+        - pi
+        - Not provider-specific
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, install method, and terminal.
+    validations:
+      required: true
